@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-
+from .models import SensorData
 # MQTT Configuration
 MQTT_BROKER = "af506f8e7c3544458df791a91afc05c0.s1.eu.hivemq.cloud"
 MQTT_PORT = 8883
@@ -13,9 +13,13 @@ client = mqtt.Client()
 
 
 # Callback when a message is received
-def on_message(client, userdata, msg):
-    print(f"Received message: '{msg.payload.decode()}' on topic '{msg.topic}'")
-    # Add custom logic for processing incoming messages
+def on_message(client, userdata, msg):  # Import here to avoid circular dependency
+    message = msg.payload.decode()
+    topic = msg.topic
+    print(f"Received message: '{message}' on topic '{topic}'")
+
+    # Save to database
+    SensorData.objects.create(topic=topic, message=message)
 
 
 def start_mqtt_client():
