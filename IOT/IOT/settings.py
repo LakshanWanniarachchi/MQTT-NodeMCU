@@ -25,12 +25,14 @@ SECRET_KEY = 'django-insecure-8rfwhly$kav3po+7-2$0z%3xsh%j-cq083kb)41&*!yp0njqm&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'NodeMCU',
+
 ]
 
 MIDDLEWARE = [
@@ -51,6 +54,18 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'IOT.urls'
+
+ASGI_APPLICATION = 'IOT.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": ['redis://default:bFBZgMrxoTxDSvteYCgPONHmYSxOKeSH@junction.proxy.rlwy.net:59413'],
+        },
+    },
+}
+
 
 TEMPLATES = [
     {
@@ -68,7 +83,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'IOT.wsgi.application'
+# WSGI_APPLICATION = 'IOT.wsgi.application'
 
 
 # Database

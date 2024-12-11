@@ -1,5 +1,11 @@
+# mqtt_client.py
+
+import json
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 import paho.mqtt.client as mqtt
 from .models import SensorData
+
 # MQTT Configuration
 MQTT_BROKER = "af506f8e7c3544458df791a91afc05c0.s1.eu.hivemq.cloud"
 MQTT_PORT = 8883
@@ -12,14 +18,23 @@ PUBLISH_TOPIC = "inTopic"
 client = mqtt.Client()
 
 
-# Callback when a message is received
-def on_message(client, userdata, msg):  # Import here to avoid circular dependency
+def on_message(client, userdata, msg):
     message = msg.payload.decode()
     topic = msg.topic
     print(f"Received message: '{message}' on topic '{topic}'")
 
     # Save to database
     SensorData.objects.create(topic=topic, message=message)
+
+    # Broadcast the message to WebSocket clients
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        "sensor_data_group",  # Group name
+        {
+            "type": "send_sensor_data",  # Event name
+            "message": {"topic": topic, "data": message},  # Payload
+        },
+    )
 
 
 def start_mqtt_client():
