@@ -1,0 +1,27 @@
+services:
+  iot:
+    build: .
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/usr/src/app
+
+    depends_on:
+      - iot
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
