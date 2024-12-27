@@ -2,6 +2,8 @@
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 
+
+
 // WiFi credentials
 const char* ssid = "WTF";
 const char* password = "LaL@war@12345";
@@ -47,11 +49,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
+  
+  int signal = -1; // Initialize signal with a default value
+  
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
+    
+    // Convert the payload byte to an integer value
+    if (i == 0) { 
+      signal = (int)payload[i] - '0'; // Convert char '1'/'0' to integer 1/0
+    }
+    
   }
+
+  // Perform the action based on the signal value
+  if (signal == 1) {
+    digitalWrite(BUILTIN_LED, HIGH);
+
+    Serial.println("Light On");
+
+  } else if (signal == 0) {
+    digitalWrite(BUILTIN_LED, LOW);
+    Serial.println("Light Off");
+  }
+
   Serial.println();
 }
+
 
 void reconnect() {
   while (!client.connected()) {
