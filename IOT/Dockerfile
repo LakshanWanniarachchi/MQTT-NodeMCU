@@ -26,5 +26,5 @@ RUN pip install gunicorn
 EXPOSE 8000
 
 # Command to run Gunicorn
-# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "IOT.wsgi:application"]
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "IOT.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "IOT.wsgi:application"]
+# CMD ["gunicorn", "--config", "gunicorn.conf.py", "IOT.wsgi:application"]
