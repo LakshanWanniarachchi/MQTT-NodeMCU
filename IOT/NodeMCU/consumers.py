@@ -1,5 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
+from .services import publish_message
 
 
 class SensorDataConsumer(AsyncWebsocketConsumer):
@@ -16,9 +17,23 @@ class SensorDataConsumer(AsyncWebsocketConsumer):
             f"WebSocket disconnected: {self.scope['client']} with close code {close_code}")
 
     async def receive(self, text_data):
-        print(f"Message received: {text_data}")
-        # Optionally, respond back to the WebSocket client
-        await self.send(text_data=json.dumps({"message": f"Server received: {text_data}"}))
+        try:
+            # Parse the text_data string into a dictionary
+            data = json.loads(text_data)
+            print(f"Message received: {data}")
+
+            # Access the 'inputValue' key from the parsed dictionary
+            input_value = data.get('inputValue')
+
+            # Ensure input_value is valid before publishing the message
+            if input_value is not None:
+                publish_message(input_value)
+
+            # Optionally, respond back to the WebSocket client
+            await self.send(text_data=json.dumps({"message": f"Server received: {input_value}"}))
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON: {e}")
+            await self.send(text_data=json.dumps({"error": "Invalid JSON format"}))
 
     async def send_sensor_data(self, event):
         # Send MQTT data to WebSocket clients
