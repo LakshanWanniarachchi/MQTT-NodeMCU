@@ -1,31 +1,29 @@
-# Use the official Python image from the Docker Hub
-# FROM python:3.9
+# Use the official Python slim image
 FROM python:3.9-slim
 
 # Upgrade pip
 RUN pip install --upgrade pip
 
+# Set environment variable for Django
+# ENV DJANGO_SETTINGS_MODULE=IOT.settings
+
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the requirements file to the working directory
+# Copy the requirements file to leverage Docker cache
 COPY requirements.txt .
 
-# Install the dependencies specified in requirements.txt
+# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application code
 COPY . .
 
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Install Gunicorn
-RUN pip install gunicorn
-
-# Expose the port Gunicorn will run on
+# Expose the port for Daphne
 EXPOSE 8000
 
-# Command to run Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "IOT.wsgi:application"]
-# CMD ["gunicorn", "--config", "gunicorn.conf.py", "IOT.wsgi:application"]
+# Command to run Daphne for WebSockets
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "IOT.asgi:application"]
