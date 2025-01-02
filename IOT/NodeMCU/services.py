@@ -4,7 +4,6 @@ import json
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 import paho.mqtt.client as mqtt
-from .models import SensorData
 
 # MQTT Configuration
 MQTT_BROKER = "af506f8e7c3544458df791a91afc05c0.s1.eu.hivemq.cloud"
@@ -24,6 +23,8 @@ def on_message(client, userdata, msg):
     print(f"Received message: '{message}' on topic '{topic}'")
 
     # Save to database
+    from .models import SensorData
+
     SensorData.objects.create(topic=topic, message=message)
 
     # Broadcast the message to WebSocket clients

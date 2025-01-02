@@ -3,7 +3,7 @@ from django.db import models
 
 class SensorData(models.Model):
     topic = models.CharField(max_length=255)  # MQTT topic
-    message = models.TextField()             # Received message
+    message = models.TextField()
     # Automatically record when data was received
     timestamp = models.DateTimeField(auto_now_add=True)
 
