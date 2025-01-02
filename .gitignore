@@ -1,0 +1,68 @@
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+
+# Ignore virtual environment directories
+venv/
+env/
+.env
+
+# Ignore Django migration files
+*/migrations/
+
+# Ignore database files
+db.sqlite3
+
+# Ignore log files
+*.log
+
+# Ignore media and static files
+/media/
+/static/
+
+# Ignore IDE files
+.idea/
+*.swp
+
+
+# Node.js dependencies
+node_modules/
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+
+# Django migrations
+*/migrations/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.env/
+
+# Database files
+db.sqlite3
+
+# Django logs
+*.log
+
+
+# IntelliJ IDEA
+.idea/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
