@@ -32,7 +32,7 @@ jobs:
       # Step 5: Tag and Push Images to Docker Hub
       - name: Tag and Push Docker Images
         run: |
-          docker tag IOT_iot:latest lakshanwanniarachchi/iot:latest
-          docker tag IOT_nginx:latest lakshanwanniarachchi/nginx:latest
-          docker push lakshanwanniarachchi/iot:latest
-          docker push lakshanwanniarachchi/nginx:latest
+            docker tag iot-iot:latest lakshanwanniarachchi/iot:latest
+            docker tag iot-nginx:latest lakshanwanniarachchi/nginx:latest
+            docker push lakshanwanniarachchi/iot:latest
+            docker push lakshanwanniarachchi/nginx:latest
