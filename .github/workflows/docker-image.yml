@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted  # Use self-hosted runner (on your Lightsail server)
 
     steps:
       # Step 1: Checkout the code
@@ -21,18 +21,32 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 3: Build Docker Compose Services
+      # Step 3: Build Docker Images
       - name: Build Docker Images
-        run: docker-compose -f IOT/docker-compose.yml build --progress=plain iot nginx
+        run: |
+          docker-compose -f IOT/docker-compose.yml build --progress=plain iot nginx
 
       # Step 4: List Docker Images (Debugging)
       - name: List Docker Images
         run: docker images
 
-      # Step 5: Tag and Push Images to Docker Hub
+      # Step 5: Tag and Push Docker Images to Docker Hub
       - name: Tag and Push Docker Images
         run: |
-            docker tag iot-iot:latest lakshanwanniarachchi/iot:latest
-            docker tag iot-nginx:latest lakshanwanniarachchi/nginx:latest
-            docker push lakshanwanniarachchi/iot:latest
-            docker push lakshanwanniarachchi/nginx:latest
+          docker tag iot-iot:latest lakshanwanniarachchi/iot:latest
+          docker tag iot-nginx:latest lakshanwanniarachchi/nginx:latest
+          docker push lakshanwanniarachchi/iot:latest
+          docker push lakshanwanniarachchi/nginx:latest
+
+      # Step 6: Pull latest Docker images and restart containers
+      - name: Pull latest Docker images and restart containers
+        run: |
+          # Pull the latest Docker images from Docker Hub
+          docker pull lakshanwanniarachchi/iot:latest
+          docker pull lakshanwanniarachchi/nginx:latest
+
+          # Stop and remove existing containers (if any)
+          docker-compose -f IOT/docker-compose.yml down
+
+          # Restart the containers with the latest images
+          docker-compose -f IOT/docker-compose.yml up -d
