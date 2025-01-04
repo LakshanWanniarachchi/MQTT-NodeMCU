@@ -24,7 +24,7 @@ jobs:
       # Build and push Docker images
       - name: Build and Push Docker Images
         run: |
-          docker-compose -f docker-compose.yml build
+          docker-compose -f IOT/docker-compose.yml build
           docker tag iot:latest lakshanwanniarachchi/iot:latest
           docker tag nginx:latest lakshanwanniarachchi/nginx:latest
           docker push lakshanwanniarachchi/iot:latest
