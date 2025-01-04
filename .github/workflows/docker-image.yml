@@ -23,31 +23,35 @@ jobs:
 
       # Step 3: Build Docker Compose Services
       - name: Build Docker Images
-        run: |
-          docker-compose -f IOT/docker-compose.yml build iot nginx
+        run: docker-compose -f IOT/docker-compose.yml build --progress=plain iot nginx
 
-      # Step 4: Tag and Push Images to Docker Hub
+      # Step 4: List Docker Images (Debugging)
+      - name: List Docker Images
+        run: docker images
+
+      # Step 5: Tag and Push Images to Docker Hub
       - name: Tag and Push Docker Images
         run: |
-          docker tag iot:latest lakshanwanniarachchi/iot:latest
-          docker tag nginx:latest lakshanwanniarachchi/nginx:latest
+          docker tag IOT_iot:latest lakshanwanniarachchi/iot:latest
+          docker tag IOT_nginx:latest lakshanwanniarachchi/nginx:latest
           docker push lakshanwanniarachchi/iot:latest
           docker push lakshanwanniarachchi/nginx:latest
 
-      # Step 5: Deploy to AWS Lightsail
-      - name: Deploy to AWS Lightsail
-        uses: appleboy/ssh-action@v0.1.6
-        with:
-          host: ${{ secrets.LIGHTSAIL_SERVER_HOST }}
-          username: ${{ secrets.LIGHTSAIL_SERVER_USER }}
-          password: ${{ secrets.LIGHTSAIL_SERVER_PASSWORD }}
-          script: |
-            # Pull the latest images
-            docker pull lakshanwanniarachchi/iot:latest
-            docker pull lakshanwanniarachchi/nginx:latest
+
+      # # Step 5: Deploy to AWS Lightsail
+      # - name: Deploy to AWS Lightsail
+      #   uses: appleboy/ssh-action@v0.1.6
+      #   with:
+      #     host: ${{ secrets.LIGHTSAIL_SERVER_HOST }}
+      #     username: ${{ secrets.LIGHTSAIL_SERVER_USER }}
+      #     password: ${{ secrets.LIGHTSAIL_SERVER_PASSWORD }}
+      #     script: |
+      #       # Pull the latest images
+      #       docker pull lakshanwanniarachchi/iot:latest
+      #       docker pull lakshanwanniarachchi/nginx:latest
             
-            # Stop existing containers
-            docker-compose -f /path/to/docker-compose.yml down
+      #       # Stop existing containers
+      #       docker-compose -f /path/to/docker-compose.yml down
             
             # Restart services
             docker-compose -f /path/to/docker-compose.yml up -d
