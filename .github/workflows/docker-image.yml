@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ip-172-26-3-92
+    runs-on: self-hosted
 
     steps:
       # Step 1: Checkout the code
