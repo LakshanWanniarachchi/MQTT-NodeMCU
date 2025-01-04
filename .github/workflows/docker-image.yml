@@ -36,22 +36,3 @@ jobs:
           docker tag IOT_nginx:latest lakshanwanniarachchi/nginx:latest
           docker push lakshanwanniarachchi/iot:latest
           docker push lakshanwanniarachchi/nginx:latest
-
-
-      # # Step 5: Deploy to AWS Lightsail
-      # - name: Deploy to AWS Lightsail
-      #   uses: appleboy/ssh-action@v0.1.6
-      #   with:
-      #     host: ${{ secrets.LIGHTSAIL_SERVER_HOST }}
-      #     username: ${{ secrets.LIGHTSAIL_SERVER_USER }}
-      #     password: ${{ secrets.LIGHTSAIL_SERVER_PASSWORD }}
-      #     script: |
-      #       # Pull the latest images
-      #       docker pull lakshanwanniarachchi/iot:latest
-      #       docker pull lakshanwanniarachchi/nginx:latest
-            
-      #       # Stop existing containers
-      #       docker-compose -f /path/to/docker-compose.yml down
-            
-            # Restart services
-            docker-compose -f /path/to/docker-compose.yml up -d
