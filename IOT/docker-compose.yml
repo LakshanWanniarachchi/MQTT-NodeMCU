@@ -3,6 +3,7 @@ version: "3.9"
 services:
   iot:
     build: .
+    image: iot-iot:latest
     volumes:
       - .:/usr/src/app
 
@@ -16,6 +17,7 @@ services:
   nginx:
     build:
       context: ./nginx
+    image: iot-nginx:latest
     ports:
       - "80:80"
     volumes:
